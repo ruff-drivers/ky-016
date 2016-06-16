@@ -7,73 +7,43 @@
 
 var driver = require('ruff-driver');
 
-var MAX_INTENSITY = 255;
-
-function checkAndGet(val) {
-    if (val >= 0 && val <= MAX_INTENSITY) {
-        return val;
-    }
-    // eslint-disable-next-line no-console
-    console.error('parameter should be within 0-255');
-    return 0;
-}
-
-function _turnOff(led) {
-    led._pwmR.setDuty(checkAndGet(0) / MAX_INTENSITY);
-    led._pwmG.setDuty(checkAndGet(0) / MAX_INTENSITY);
-    led._pwmB.setDuty(checkAndGet(0) / MAX_INTENSITY);
-}
-
 module.exports = driver({
-
     attach: function (inputs) {
-        this._pwmR = inputs.getRequired('pwm-r');
-        this._pwmG = inputs.getRequired('pwm-g');
-        this._pwmB = inputs.getRequired('pwm-b');
-
-        this._rgb = {
-            r: MAX_INTENSITY,
-            g: MAX_INTENSITY,
-            b: MAX_INTENSITY
-        };
-        _turnOff(this);
-        this._on = false;
+        this._pwmR = inputs['pwm-r'];
+        this._pwmG = inputs['pwm-g'];
+        this._pwmB = inputs['pwm-b'];
     },
-
     exports: {
-        turnOn: function () {
-            this._pwmR.setDuty(this._rgb.r / MAX_INTENSITY);
-            this._pwmG.setDuty(this._rgb.g / MAX_INTENSITY);
-            this._pwmB.setDuty(this._rgb.b / MAX_INTENSITY);
-
-            this._on = true;
-        },
-
-        turnOff: function () {
-            _turnOff(this);
-
-            this._on = false;
-        },
-
-        setRGB: function (r, g, b) {
-            this._rgb = {
-                r: checkAndGet(r),
-                g: checkAndGet(g),
-                b: checkAndGet(b)
-            };
-            if (this._on) {
-                this._pwmR.setDuty(this._rgb.r / MAX_INTENSITY);
-                this._pwmG.setDuty(this._rgb.g / MAX_INTENSITY);
-                this._pwmB.setDuty(this._rgb.b / MAX_INTENSITY);
+        setRGB: function (rgb, callback) {
+            if (typeof callback === 'number') {
+                this._r = arguments[0];
+                this._g = arguments[1];
+                this._b = arguments[2];
+                callback = arguments[3];
+            } else if (typeof rgb === 'number') {
+                this._r = rgb >> 16 & 0xff;
+                this._g = rgb >> 8 & 0xff;
+                this._b = rgb & 0xff;
+            } else if (Array.isArray(rgb)) {
+                this._r = rgb[0];
+                this._g = rgb[1];
+                this._b = rgb[2];
+            } else {
+                throw new TypeError('No signature found that matches arguments given');
             }
-        },
 
-        getRGB: function () {
-            return [this._rgb.r, this._rgb.g, this._rgb.b];
+            this._pwmR.setDuty(this._r / 0xff);
+            this._pwmG.setDuty(this._g / 0xff);
+            this._pwmB.setDuty(this._b / 0xff, callback);
         },
-
-        isOn: function () {
-            return this._on;
+        getRGB: function (callback) {
+            return setImmediate(callback, undefined, [this._r, this._g, this._b]);
+        },
+        turnOn: function (callback) {
+            this.setRGB([0xff, 0xff, 0xff], callback);
+        },
+        turnOff: function (callback) {
+            this.setRGB([0x00, 0x00, 0x00], callback);
         }
     }
 });

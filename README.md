@@ -10,7 +10,7 @@ LED dirver with RGB control using PWM interface.
 
 ## Supported Models
 
-- [KY-016](https://rap.ruff.io/devices/KY-016)
+- [ky-016](https://rap.ruff.io/devices/ky-016)
 
 ## Installing
 
@@ -22,7 +22,7 @@ Execute following command and enter a **supported model** to install.
 rap device add <device-id>
 
 # Then enter a supported model, for example:
-# ? model: KY-016
+# ? model: ky-016
 ```
 
 ## Usage
@@ -31,36 +31,41 @@ Here is the usage of this driver.
 
 ```js
 $('#<device-id>').turnOn();
+
 $('#<device-id>').turnOff();
-$('#<device-id>').setRGB(r, g, b);
-$('#<device-id>').getRGB();
-$('#<device-id>').isOn();
+
+$('#<device-id>').setRGB([0x80, 0x80, 0x80]);
+
+$('#<device-id>').getRGB(function (error, rgb) {
+    console.log(rgb);
+});
 ```
 
 ## API References
 
 ### Methods
 
-#### `turnOn()`
+#### `turnOn([callback])`
 
-Turn on the LED.
+Set all of RGB values to `0xff`.
 
-#### `turnOff()`
+#### `turnOff([callback])`
 
-Turn off the LED.
+Set all of RGB values to `0x00`.
 
-### `setRGB(r, g, b)`
+### `setRGB(...)`
 
-set the intensity of Red, Green, and Blue component.
+Set the intensity (`0` ~ `0xff`) of red, green, and blue component.
 
-- r, g, b should be number inside 0~255
+- `setRGB(rgb, [callback])`
 
-### `getRGB()`
-get the array [r, g, b] which represents the intensity of Red, Green, and Blue component.
+  For this overload, `rgb` could either be an array of three numbers or a single 24-bit number.
 
-### `isOn()`
+- `setRGB(r, g, b, [callback])`
 
-get the working state of LED.
+### `getRGB(callback)`
+
+Get the array `[r, g, b]` as the second argument in the callback which represents the intensity of red, green, and blue components respectively.
 
 ## Contributing
 

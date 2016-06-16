@@ -1,34 +1,34 @@
 export declare class LED extends RuffDevice {
     /**
-     * Turn on the LED.
+     * Set all of RGB values to 0xff.
      */
-    turnOn(): void;
-
+    turnOn(callback?: (error: any) => void): void;
     /**
-     * Turn off the LED.
+     * Set all of RGB values to 0x00.
      */
-    turnOff(): void;
-
+    turnOff(callback?: (error: any) => void): void;
     /**
-     * set the intensity of LED.
-     * @param r intensitu of RED component.
-     * @param g intensitu of Green component.
-     * @param b intensitu of Blue component.
+     * Set the intensity of LED RGB.
+     * @param rgb A 24-bit number (8 bits per color).
      */
-    setRGB(r: number, g: number, b: number): void;
-
+    setRGB(rgb: number, callback?: (error: any) => void): void;
     /**
-     * get the intensity of LED.
+     * Set the intensity of LED RGB.
+     * @param rgb An array with R, G, B intensity as values.
+     */
+    setRGB(rgb: number[], callback?: (error: any) => void): void;
+    /**
+     * Set the intensity of LED RGB.
+     * @param r Intensity of RED component.
+     * @param g Intensity of Green component.
+     * @param b Intensity of Blue component.
+     */
+    setRGB(r: number, g: number, b: number, callback?: (error: any) => void): void;
+    /**
+     * Get the intensity of LED.
      * @returns the array [r, g, b] of the intensity of Red, Green, and Blue component respectively
      */
-    getRGB(): [number, number, number];
-
-    /**
-     * get the working state of LED.
-     * @returns 'ture' means turn on, 'false' means turn off.
-     */
-    isOn(): boolean;
-
+    getRGB(callback: (error: any, rgb: [number, number, number]) => void): void;
 }
 
 export default LED;
