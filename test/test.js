@@ -13,7 +13,7 @@ var Device = require('../');
 
 require('t');
 
-describe('Driver {driver-name}', function () {
+describe('KY-016 RGB LED Driver', function () {
     var led;
 
     var pwmR;
@@ -72,7 +72,7 @@ describe('Driver {driver-name}', function () {
         led.turnOn(done);
     });
 
-    it('shoud turn off', function (done) {
+    it('should turn off', function (done) {
         when(led)
             .setRGB([0x00, 0x00, 0x00], any)
             .then(function (rgb, callback) {
