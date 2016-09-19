@@ -6,7 +6,7 @@ LED dirver with RGB control using PWM interface.
 
 ## Supported Engines
 
-* Ruff: >=1.2.0 <1.5.0
+* Ruff: >=1.2.0 <1.6.0
 
 ## Supported Models
 
