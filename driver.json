@@ -3,6 +3,9 @@
         "KY-016"
     ],
     "inputs": {
+        "gnd": {
+            "type": "ground"
+        },
         "pwm-r": {
             "type": "pwm",
             "args": {
